@@ -9,6 +9,17 @@
   color-scheme: light;
 }
 
+[data-theme='dark'] {
+  --ink: #e2ece8;
+  --muted: rgba(226, 236, 232, 0.65);
+  --glass: rgba(24, 34, 32, 0.78);
+  --stroke: rgba(226, 236, 232, 0.12);
+  --accent: #e8785c;
+  --accent-2: #4dd6c6;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
 *,
 *::before,
 *::after {
@@ -27,6 +38,10 @@ body {
   color: var(--ink);
 }
 
+[data-theme='dark'] body {
+  background: #1a2523;
+}
+
 button,
 input {
   font: inherit;
@@ -41,6 +56,11 @@ button:focus-visible,
 input:focus-visible {
   outline: 2px solid rgba(200, 79, 56, 0.85);
   outline-offset: 2px;
+}
+
+[data-theme='dark'] button:focus-visible,
+[data-theme='dark'] input:focus-visible {
+  outline-color: rgba(232, 120, 92, 0.85);
 }
 
 .sr-only {
@@ -114,6 +134,53 @@ input:focus-visible {
 
 .is-night .sky {
   filter: saturate(0.85) brightness(0.82);
+}
+
+[data-theme='dark'] .sky {
+  background:
+    radial-gradient(1000px 660px at 8% -10%, rgba(120, 160, 220, 0.18), transparent 55%),
+    radial-gradient(900px 600px at 92% 6%, rgba(100, 190, 180, 0.16), transparent 52%),
+    linear-gradient(180deg, #1e2e2c 0%, #1a2826 52%, #162422 100%);
+}
+
+[data-theme='dark'] .mood-clear .sky {
+  background:
+    radial-gradient(1000px 640px at 18% -8%, rgba(200, 170, 80, 0.18), transparent 52%),
+    radial-gradient(900px 540px at 90% 0%, rgba(80, 160, 180, 0.16), transparent 50%),
+    linear-gradient(180deg, #222e2c 0%, #1d2927 58%, #1a2624 100%);
+}
+
+[data-theme='dark'] .mood-partly .sky {
+  background:
+    radial-gradient(900px 500px at 80% 0%, rgba(120, 160, 200, 0.18), transparent 48%),
+    linear-gradient(180deg, #1e2b2a 0%, #1b2726 100%);
+}
+
+[data-theme='dark'] .mood-overcast .sky,
+[data-theme='dark'] .mood-fog .sky {
+  background: linear-gradient(180deg, #1c2927 0%, #192523 100%);
+}
+
+[data-theme='dark'] .mood-rain .sky {
+  background:
+    radial-gradient(850px 500px at 88% 0%, rgba(80, 150, 160, 0.2), transparent 52%),
+    linear-gradient(180deg, #1a2725 0%, #172422 100%);
+}
+
+[data-theme='dark'] .mood-storm .sky {
+  background:
+    radial-gradient(700px 400px at 70% 10%, rgba(140, 100, 80, 0.2), transparent 50%),
+    linear-gradient(180deg, #1d2624 0%, #192220 100%);
+}
+
+[data-theme='dark'] .mood-snow .sky {
+  background:
+    radial-gradient(850px 520px at 15% 0%, rgba(200, 220, 230, 0.12), transparent 55%),
+    linear-gradient(180deg, #1f2c2b 0%, #1b2827 100%);
+}
+
+[data-theme='dark'] .is-night .sky {
+  filter: saturate(0.7) brightness(0.72);
 }
 
 .grain {
@@ -201,6 +268,45 @@ input:focus-visible {
   color: #f5f7ed;
 }
 
+[data-theme='dark'] .unit-toggle .active {
+  color: #1a2523;
+}
+
+.masthead-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--stroke);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  padding: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: rgba(200, 79, 56, 0.55);
+}
+
+[data-theme='dark'] .theme-toggle:hover,
+[data-theme='dark'] .theme-toggle:focus-visible {
+  border-color: rgba(232, 120, 92, 0.55);
+}
+
+.theme-toggle-glyph {
+  display: block;
+}
+
 .search-bar {
   position: relative;
   z-index: 20;
@@ -252,6 +358,10 @@ input:focus-visible {
   z-index: 30;
 }
 
+[data-theme='dark'] .suggestions {
+  background: rgba(24, 34, 32, 0.97);
+}
+
 .suggestions button {
   width: 100%;
   display: flex;
@@ -268,6 +378,12 @@ input:focus-visible {
 .suggestions button:focus-visible,
 .suggestions button.active {
   background: rgba(25, 61, 59, 0.07);
+}
+
+[data-theme='dark'] .suggestions button:hover,
+[data-theme='dark'] .suggestions button:focus-visible,
+[data-theme='dark'] .suggestions button.active {
+  background: rgba(226, 236, 232, 0.08);
 }
 
 .suggestions span {
@@ -314,12 +430,21 @@ input:focus-visible {
   margin-bottom: 20px;
 }
 
+[data-theme='dark'] .error-banner {
+  border-color: rgba(232, 120, 92, 0.35);
+  background: rgba(232, 120, 92, 0.15);
+}
+
 .error-kicker {
   margin: 0 0 4px;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.68rem;
   color: #a63e2d;
+}
+
+[data-theme='dark'] .error-kicker {
+  color: #f4a58a;
 }
 
 .empty-state {
@@ -333,6 +458,10 @@ input:focus-visible {
   border: 1px solid var(--stroke);
   border-radius: 14px;
   color: var(--muted);
+}
+
+[data-theme='dark'] .empty-state {
+  background: rgba(24, 34, 32, 0.54);
 }
 
 .loading-state {
@@ -350,6 +479,11 @@ input:focus-visible {
   border: 2px solid rgba(200, 79, 56, 0.3);
   box-shadow: 0 0 0 12px rgba(200, 79, 56, 0.08);
   animation: pulse 1.6s ease-in-out infinite;
+}
+
+[data-theme='dark'] .pulse-ring {
+  border-color: rgba(232, 120, 92, 0.35);
+  box-shadow: 0 0 0 12px rgba(232, 120, 92, 0.12);
 }
 
 @keyframes pulse {
@@ -545,6 +679,10 @@ input:focus-visible {
   scrollbar-color: rgba(25, 61, 59, 0.34) transparent;
 }
 
+[data-theme='dark'] .hourly-strip {
+  scrollbar-color: rgba(226, 236, 232, 0.24) transparent;
+}
+
 .hourly-strip::-webkit-scrollbar {
   height: 8px;
 }
@@ -556,6 +694,10 @@ input:focus-visible {
 .hourly-strip::-webkit-scrollbar-thumb {
   background: rgba(25, 61, 59, 0.24);
   border-radius: 999px;
+}
+
+[data-theme='dark'] .hourly-strip::-webkit-scrollbar-thumb {
+  background: rgba(226, 236, 232, 0.2);
 }
 
 .hour-card {
@@ -615,6 +757,19 @@ input:focus-visible {
 .weather-icon {
   width: 34px;
   height: 34px;
+}
+
+[data-theme='dark'] .weather-icon[aria-hidden='true'] {
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.15));
+}
+
+.moon-icon {
+  color: #000000;
+}
+
+[data-theme='dark'] .moon-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
 }
 
 .colophon {

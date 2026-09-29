@@ -9,11 +9,13 @@ import { EmptyState, ErrorBanner, LoadingState } from './components/Status';
 import { WeatherDetails } from './components/WeatherDetails';
 import { useWeather } from './hooks/useWeather';
 import { describeWeather } from './utils/weatherCodes';
+import { useTheme } from './hooks/useTheme';
 
 const QUICK_CITIES = ['Lisbon', 'Kyoto', 'Lagos', 'Reykjavík', 'Cape Town'];
 
 function App() {
   const weather = useWeather();
+  const { theme, toggle } = useTheme();
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -37,20 +39,33 @@ function App() {
           <p className="brand-mark">Meridian</p>
           <p className="brand-sub">Field weather almanac</p>
         </div>
-        <div className="unit-toggle" role="group" aria-label="Temperature unit">
+        <div className="masthead-controls">
+          <div className="unit-toggle" role="group" aria-label="Temperature unit">
+            <button
+              type="button"
+              className={weather.unit === 'C' ? 'active' : ''}
+              onClick={() => weather.setUnit('C')}
+            >
+              °C
+            </button>
+            <button
+              type="button"
+              className={weather.unit === 'F' ? 'active' : ''}
+              onClick={() => weather.setUnit('F')}
+            >
+              °F
+            </button>
+          </div>
           <button
             type="button"
-            className={weather.unit === 'C' ? 'active' : ''}
-            onClick={() => weather.setUnit('C')}
+            className="theme-toggle"
+            onClick={toggle}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`${theme === 'dark' ? 'Light' : 'Dark'} mode`}
           >
-            °C
-          </button>
-          <button
-            type="button"
-            className={weather.unit === 'F' ? 'active' : ''}
-            onClick={() => weather.setUnit('F')}
-          >
-            °F
+            <span className="theme-toggle-glyph" aria-hidden="true">
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </span>
           </button>
         </div>
       </header>

@@ -20,14 +20,14 @@ export function WeatherIcon({ name, className = '', isDay = true }) {
   };
 
   const moonStyle = {
-    color: '#000000',
+    filter: 'drop-shadow(0 0 4px rgba(245, 247, 237, 0.45))',
   };
 
   switch (name) {
     case 'sun':
       if (!isDay) {
         return (
-          <svg {...common} style={moonStyle}>
+          <svg {...common} style={moonStyle} className={`weather-icon moon-icon`}>
             <path d="M40 34.5A12 12 0 1 1 29.5 18 10 10 0 0 0 40 34.5Z" />
           </svg>
         );

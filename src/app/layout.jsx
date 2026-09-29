@@ -1,4 +1,5 @@
 import '../styles/global.css';
+import { cookies } from 'next/headers';
 
 export const metadata = {
   title: 'Meridian - Weather Almanac',
@@ -6,9 +7,12 @@ export const metadata = {
   icons: { icon: '/favicon.svg' },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get('meridian-theme')?.value === 'dark' ? 'dark' : 'light';
+
   return (
-    <html lang="en">
+    <html lang="en" data-theme={theme}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
