@@ -36,7 +36,7 @@ function App() {
 
       <header className="masthead">
         <div className="brand">
-          <p className="brand-mark">Meridian</p>
+          <p className="brand-mark">Vantage</p>
           <p className="brand-sub">Field weather almanac</p>
         </div>
         <div className="masthead-controls">

@@ -2,7 +2,7 @@ import '../styles/global.css';
 import { cookies } from 'next/headers';
 
 export const metadata = {
-  title: 'Meridian - Weather Almanac',
+  title: 'Vantage - Weather Almanac',
   description: 'Current conditions and forecasts for cities around the world.',
   icons: { icon: '/favicon.svg' },
 };

@@ -1,4 +1,4 @@
-# Meridian — Next.js Weather App
+# Vantage — Next.js Weather App
 
 A Next.js weather almanac that loads current conditions, the next twelve hours, and a seven-day outlook from [Open-Meteo](https://open-meteo.com/). No API key is required.
 
