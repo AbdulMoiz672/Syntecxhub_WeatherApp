@@ -518,7 +518,7 @@ input:focus-visible {
 
 .hero-card {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.5fr 0.5fr;
   gap: 18px 32px;
   padding: 32px;
   border-radius: 28px;
