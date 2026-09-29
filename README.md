@@ -1,6 +1,6 @@
-# Meridian — React Weather App
+# Meridian — Next.js Weather App
 
-A React weather almanac that loads current conditions, the next twelve hours, and a seven-day outlook from [Open-Meteo](https://open-meteo.com/). No API key is required.
+A Next.js weather almanac that loads current conditions, the next twelve hours, and a seven-day outlook from [Open-Meteo](https://open-meteo.com/). No API key is required.
 
 ## Run locally
 
@@ -15,17 +15,14 @@ Open `http://localhost:3000`.
 
 ```
 Weather-App/
-├── server/                 Node API and production static server
 ├── public/                 static assets
 ├── src/
-│   ├── api/                Backend API fetch helpers & error mapping
-│   ├── components/         search, current weather, forecasts, status
-│   ├── hooks/              useWeather — data loading with useEffect
-│   ├── styles/             global CSS
-│   ├── utils/              WMO weather codes & formatters
-│   ├── App.jsx
-│   └── main.jsx
-├── index.html
+│   ├── app/                 Next.js App Router pages and API route
+│   ├── api/                 Browser API fetch helpers & error mapping
+│   ├── components/          search, current weather, forecasts, status
+│   ├── hooks/               useWeather — data loading with useEffect
+│   ├── styles/              global CSS
+│   └── utils/               WMO weather codes & formatters
 └── package.json
 ```
 
@@ -52,7 +49,7 @@ Weather-App/
 9. **Accessible interaction:** Search, suggestions, unit controls, location, refresh, and retry must be keyboard operable. Expose suggestion selection and loading, error, and empty-result states to assistive technology.
 10. **Automated verification:** Add tests for successful city search and forecast loading, no-match results, unit changes, refresh success and failure, offline/API errors, and location permission outcomes.
 
-The browser calls same-origin `/api` endpoints. The Node server validates requests, fetches Open-Meteo data, and briefly caches successful responses in memory to reduce duplicate upstream calls. In development, it serves Vite with hot reload; in production, it serves the built app and API from one process.
+The browser calls same-origin Next.js `/api` route handlers. The server validates requests, fetches Open-Meteo data, and briefly caches successful responses in memory to reduce duplicate upstream calls.
 
 ## Production
 
@@ -60,4 +57,4 @@ The browser calls same-origin `/api` endpoints. The Node server validates reques
 npm run build
 npm start
 ```
-The server listens on port `3000` by default. Set `PORT` and `HOST` to change the bind address.
+The Next.js server listens on port `3000` by default.

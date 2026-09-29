@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { CurrentWeather } from './components/CurrentWeather';
 import { DailyForecast } from './components/DailyForecast';
@@ -7,7 +9,6 @@ import { EmptyState, ErrorBanner, LoadingState } from './components/Status';
 import { WeatherDetails } from './components/WeatherDetails';
 import { useWeather } from './hooks/useWeather';
 import { describeWeather } from './utils/weatherCodes';
-import './styles/global.css';
 
 const QUICK_CITIES = ['Lisbon', 'Kyoto', 'Lagos', 'Reykjavík', 'Cape Town'];
 
