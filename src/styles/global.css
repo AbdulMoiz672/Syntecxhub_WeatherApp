@@ -498,7 +498,14 @@ input:focus-visible {
 
 .layout {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
+}
+
+/* Grid children default to min-width:auto, which lets wide content
+   (hourly strip, detail tiles) stretch the track past the viewport. */
+.layout > * {
+  min-width: 0;
 }
 
 .layout.is-refreshing {
@@ -518,10 +525,14 @@ input:focus-visible {
 
 .hero-card {
   display: grid;
-  grid-template-columns: 1.5fr 0.5fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
   gap: 18px 32px;
   padding: 32px;
   border-radius: 28px;
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  overflow: hidden;
 }
 
 .kicker,
@@ -545,13 +556,18 @@ input:focus-visible {
   font-size: 0.7rem;
 }
 
+.hero-copy {
+  min-width: 0;
+}
+
 .hero-copy h1 {
   margin: 0;
   font-family: 'Fraunces', Georgia, serif;
-  font-size: clamp(2.6rem, 6vw, 5.4rem);
+  font-size: clamp(2.6rem, 4.6vw, 4.4rem);
   font-weight: 480;
   letter-spacing: -0.05em;
   line-height: 0.92;
+  overflow-wrap: break-word;
 }
 
 .place-line,
@@ -565,6 +581,7 @@ input:focus-visible {
 }
 
 .hero-temp {
+  min-width: 0;
   text-align: right;
 }
 
@@ -577,7 +594,7 @@ input:focus-visible {
 .temp-display {
   margin: 0;
   font-family: 'Fraunces', Georgia, serif;
-  font-size: clamp(4.4rem, 9vw, 7.5rem);
+  font-size: clamp(3.4rem, 6vw, 5.6rem);
   font-weight: 560;
   letter-spacing: -0.07em;
   line-height: 0.85;
@@ -622,13 +639,18 @@ input:focus-visible {
 
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
 }
 
 .detail-tile {
   border-radius: 20px;
   padding: 16px 18px;
+  min-width: 0;
+}
+
+.detail-tile strong {
+  overflow-wrap: anywhere;
 }
 
 .detail-tile p {
@@ -674,6 +696,7 @@ input:focus-visible {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 6px;
@@ -790,7 +813,7 @@ input:focus-visible {
   }
 
   .hero-card {
-    grid-template-columns: 1.5fr 0.5fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto);
     gap: 16px 24px;
     padding: 28px;
   }
