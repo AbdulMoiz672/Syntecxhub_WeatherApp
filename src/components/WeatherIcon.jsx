@@ -15,11 +15,12 @@ export function WeatherIcon({ name, className = '', isDay = true }) {
   };
 
   const sunStyle = {
-    color: '#f5c75b',
+    color: '#ffdd00',
+    filter: 'drop-shadow(0 0 6px rgba(255, 221, 0, 0.75))',
   };
 
   const moonStyle = {
-    color: '#f4f1ec',
+    color: '#000000',
   };
 
   switch (name) {
