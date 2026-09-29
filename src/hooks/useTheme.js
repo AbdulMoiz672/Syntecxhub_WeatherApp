@@ -1,46 +1,52 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
+import { useThemeContext } from '../components/ThemeContext';
 
 const THEME_KEY = 'meridian-theme';
+const listeners = new Set();
 
-function getInitialTheme() {
-  if (typeof window === 'undefined') return 'light';
-  const htmlTheme = document.documentElement.getAttribute('data-theme');
-  if (htmlTheme === 'dark' || htmlTheme === 'light') return htmlTheme;
+/**
+ * The single source of truth is the `data-theme` attribute on <html>,
+ * which the server sets from the cookie. Reading it keeps the server and
+ * client in agreement during hydration.
+ */
+function readTheme() {
+  if (typeof document === 'undefined') return 'light';
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+}
 
-  const cookieMatch = document.cookie.match(new RegExp('(?:^|; )' + THEME_KEY + '=(dark|light)'));
-  const cookieTheme = cookieMatch ? cookieMatch[1] : null;
-  if (cookieTheme) return cookieTheme;
-
-  const stored = window.localStorage.getItem(THEME_KEY);
-  if (stored === 'dark' || stored === 'light') return stored;
-
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+/** Notifies useSyncExternalStore that the <html> attribute changed. */
+function subscribe(onStoreChange) {
+  listeners.add(onStoreChange);
+  return () => listeners.delete(onStoreChange);
 }
 
 function setCookie(value) {
   document.cookie = `${THEME_KEY}=${value}; path=/; max-age=31536000; SameSite=Lax`;
 }
 
+export function setTheme(next) {
+  if (typeof document === 'undefined') return;
+  document.documentElement.setAttribute('data-theme', next);
+  try {
+    window.localStorage.setItem(THEME_KEY, next);
+  } catch {
+    /* ignore quota / private mode */
+  }
+  setCookie(next);
+  listeners.forEach((listener) => listener());
+}
+
 export function useTheme() {
-  const [theme, setTheme] = useState(getInitialTheme);
+  // The server snapshot is the theme the layout resolved from the cookie,
+  // so the first client render produces exactly the server's markup.
+  const serverTheme = useThemeContext();
+  const theme = useSyncExternalStore(subscribe, readTheme, () => serverTheme);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute('data-theme', theme);
-    window.localStorage.setItem(THEME_KEY, theme);
-    setCookie(theme);
-  }, [theme]);
+  const toggle = useCallback(() => {
+    setTheme(readTheme() === 'dark' ? 'light' : 'dark');
+  }, []);
 
-  const value = useMemo(
-    () => ({
-      theme,
-      setTheme,
-      toggle: () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark')),
-    }),
-    [theme],
-  );
-
-  return value;
+  return { theme, setTheme, toggle };
 }

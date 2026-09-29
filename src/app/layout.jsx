@@ -1,5 +1,6 @@
 import '../styles/global.css';
 import { cookies } from 'next/headers';
+import { ThemeProvider } from '../components/ThemeContext';
 
 export const metadata = {
   title: 'Vantage - Weather Almanac',
@@ -21,7 +22,9 @@ export default async function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }
