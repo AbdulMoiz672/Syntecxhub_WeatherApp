@@ -79,8 +79,6 @@ input:focus-visible {
   min-height: 100vh;
   overflow: hidden;
   padding: 28px 7vw 48px;
-  max-width: 1400px;
-  margin: 0 auto;
   box-sizing: border-box;
 }
 
