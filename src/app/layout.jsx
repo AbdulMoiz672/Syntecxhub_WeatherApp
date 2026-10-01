@@ -1,19 +1,17 @@
 import '../styles/global.css';
-import { cookies } from 'next/headers';
 import { ThemeProvider } from '../components/ThemeContext';
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || (process.env.GITHUB_PAGES === 'true' ? '/Syntecxhub_WeatherApp' : '');
 
 export const metadata = {
   title: 'Vantage - Weather Almanac',
   description: 'Current conditions and forecasts for cities around the world.',
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: `${basePath}/favicon.svg` },
 };
 
-export default async function RootLayout({ children }) {
-  const cookieStore = await cookies();
-  const theme = cookieStore.get('meridian-theme')?.value === 'dark' ? 'dark' : 'light';
-
+export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme={theme}>
+    <html lang="en" data-theme="light">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -23,7 +21,7 @@ export default async function RootLayout({ children }) {
         />
       </head>
       <body>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ThemeProvider theme="light">{children}</ThemeProvider>
       </body>
     </html>
   );
