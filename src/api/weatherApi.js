@@ -1,5 +1,30 @@
+const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1';
+const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
+const CURRENT_FIELDS = [
+  'temperature_2m', 'relative_humidity_2m', 'apparent_temperature', 'is_day',
+  'precipitation', 'weather_code', 'cloud_cover', 'pressure_msl',
+  'wind_speed_10m', 'wind_direction_10m', 'visibility',
+].join(',');
+const HOURLY_FIELDS = ['temperature_2m', 'weather_code', 'precipitation_probability', 'is_day'].join(',');
+const DAILY_FIELDS = [
+  'weather_code', 'temperature_2m_max', 'temperature_2m_min',
+  'precipitation_probability_max', 'sunrise', 'sunset', 'uv_index_max',
+].join(',');
+
 function getOfflineMessage() {
   return 'You’re offline. Check your connection and try again.';
+}
+
+function mapPlace(place) {
+  return {
+    id: place.id,
+    name: place.name,
+    country: place.country ?? '',
+    admin: place.admin1 ?? '',
+    latitude: place.latitude,
+    longitude: place.longitude,
+    timezone: place.timezone ?? 'auto',
+  };
 }
 
 async function requestJson(url, signal, retries = 2) {
@@ -27,8 +52,8 @@ async function requestJson(url, signal, retries = 2) {
       const data = await response.json();
 
       if (!response.ok) {
-        const message = data.error;
-        if (response.status === 429 && attempt < retries) {
+        const message = data.error || data.reason;
+        if ((response.status === 429 || response.status >= 500) && attempt < retries) {
           attempt += 1;
           continue;
         }
@@ -38,10 +63,6 @@ async function requestJson(url, signal, retries = 2) {
         }
 
         if (response.status >= 500) {
-          if (attempt < retries) {
-            attempt += 1;
-            continue;
-          }
           throw new Error(message || 'The weather service is temporarily unavailable. Please try again in a moment.');
         }
 
@@ -51,9 +72,7 @@ async function requestJson(url, signal, retries = 2) {
       return data;
     } catch (error) {
       if (error.name === 'AbortError') {
-        if (signal?.aborted) {
-          throw error;
-        }
+        if (signal?.aborted) throw error;
         throw new Error('The weather service took too long to respond. Please try again.');
       }
 
@@ -68,10 +87,7 @@ async function requestJson(url, signal, retries = 2) {
         throw new Error('Unable to reach the weather service. Check your internet connection.');
       }
 
-      if (error instanceof Error && error.message === getOfflineMessage()) {
-        throw error;
-      }
-
+      if (error instanceof Error && error.message === getOfflineMessage()) throw error;
       throw error;
     } finally {
       clearTimeout(timeoutId);
@@ -84,14 +100,11 @@ async function requestJson(url, signal, retries = 2) {
 
 export async function searchLocations(query, { signal, allowEmpty = false } = {}) {
   const trimmed = query.trim();
-  if (!trimmed) {
-    throw new Error('Enter a city name to search.');
-  }
+  if (!trimmed) throw new Error('Enter a city name to search.');
 
-  const params = new URLSearchParams({ q: trimmed });
-
-  const data = await requestJson(`/api/locations?${params}`, signal);
-  const results = data.results ?? [];
+  const params = new URLSearchParams({ name: trimmed, count: '6', language: 'en', format: 'json' });
+  const data = await requestJson(`${GEOCODING_URL}/search?${params}`, signal);
+  const results = (data.results ?? []).map(mapPlace);
 
   if (results.length === 0 && !allowEmpty) {
     throw new Error(`No matching places found for “${trimmed}”. Try another city.`);
@@ -104,10 +117,13 @@ export async function reverseGeocode(latitude, longitude, { signal } = {}) {
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
+    language: 'en',
+    format: 'json',
   });
 
   try {
-    return await requestJson(`/api/locations/reverse?${params}`, signal);
+    const data = await requestJson(`${GEOCODING_URL}/reverse?${params}`, signal);
+    return data.results?.[0] ? mapPlace(data.results[0]) : null;
   } catch (error) {
     if (error.name === 'AbortError') throw error;
     return null;
@@ -118,10 +134,14 @@ export async function fetchForecast({ latitude, longitude, timezone }, { signal 
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
+    current: CURRENT_FIELDS,
+    hourly: HOURLY_FIELDS,
+    daily: DAILY_FIELDS,
     timezone: timezone || 'auto',
+    forecast_days: '7',
   });
 
-  const data = await requestJson(`/api/forecast?${params}`, signal);
+  const data = await requestJson(`${FORECAST_URL}?${params}`, signal);
 
   if (!data.current || !data.daily || !data.hourly) {
     throw new Error('Weather data arrived incomplete. Please try another location.');
