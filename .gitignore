@@ -27,5 +27,3 @@ coverage
 # Build output
 /dist
 /.vite
-/.next
-node_modules
