@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Dell/OneDrive/Desktop/Weather-App/src/components/ThemeContext.jsx"],"sourcesContent":["'use client';\n\nimport { createContext, useContext } from 'react';\n\n/**\n * Holds the theme the server resolved from the cookie so the first client\n * render matches the server HTML (no hydration mismatch).\n */\nconst ThemeContext = createContext('light');\n\nexport function ThemeProvider({ theme, children }) {\n  return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;\n}\n\nexport function useThemeContext() {\n  return useContext(ThemeContext);\n}\n"],"names":["ThemeContext","ThemeProvider","theme","children","Provider","value","useThemeContext"],"mappings":";;;;;;;AAEA;AAFA;;;AAIA;;;CAGC,GACD,MAAMA,6BAAe,IAAA,sNAAa,EAAC;AAE5B,SAASC,cAAc,EAAEC,KAAK,EAAEC,QAAQ,EAAE;IAC/C,qBAAO,8OAACH,aAAaI,QAAQ;QAACC,OAAOH;kBAAQC;;;;;;AAC/C;AAEO,SAASG;IACd,OAAO,IAAA,mNAAU,EAACN;AACpB"}}]
+}
